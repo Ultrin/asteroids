@@ -29,6 +29,7 @@ def main():
     Shot.containers = (updatable, drawable, shots)
 
     player = Player(SCREEN_WIDTH/2,SCREEN_HEIGHT/2)
+    
 
     dt = 0
 
@@ -44,6 +45,11 @@ def main():
             if a.collision(player):
                 print("Game over!")
                 sys.exit()
+                
+            for s in shots:
+                if s.collision(a):
+                    a.kill()
+                    s.kill()
 
 
         screen.fill("black")
