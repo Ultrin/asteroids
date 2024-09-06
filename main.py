@@ -1,5 +1,6 @@
 import sys
 import pygame
+import pygame.font
 
 # import everything from constants
 # into the current file
@@ -10,7 +11,8 @@ from asteroidfield import AsteroidField
 from shot import Shot
 
 def main():
-    pygame.init
+    pygame.init()
+    pygame.font.init()
 
     screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
     game_clock = pygame.time.Clock()
@@ -30,10 +32,13 @@ def main():
 
     player = Player(SCREEN_WIDTH/2,SCREEN_HEIGHT/2)
     
-
     dt = 0
+    score = 0
 
     while True:
+        font = pygame.font.Font(None, 36)
+        game_over_font = pygame.font.Font(None, 108)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
@@ -44,18 +49,25 @@ def main():
         for a in asteroids:
             if a.collision(player):
                 print("Game over!")
+                #game_over_text = game_over_font.render(f'Game Over!', True, (255, 255, 255))
+                #screen.blit(game_over_text, (SCREEN_WIDTH/2,SCREEN_HEIGHT/2))
                 sys.exit()
+                #pygame.display.flip()
                 
             for s in shots:
                 if s.collision(a):
-                    a.kill()
+                    score += 1
                     s.kill()
+                    a.split()
 
 
         screen.fill("black")
 
         for d in drawable:
             d.draw(screen)
+
+        score_text = font.render(f'Score: {score}', True, (255, 255, 255))
+        screen.blit(score_text, (10, 10))
         
         pygame.display.flip()
 
